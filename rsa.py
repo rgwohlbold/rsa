@@ -166,19 +166,20 @@ class RSA:
         result += "n\t" + str(self.n) + "\n"
         result += "phi\t" + str(self.phi) + "\n"
         result += "d(pub)\t" + str(self.d) + "\n"
-        result += "e(priv)\t" + str(self.e) + "\n"
+        result += "e(priv)\t" + str(self.e)
         return result
 
 # Main RSA test function
 def main(text, length=5):
     rsa = RSA(length)
-
+    print()
     # Encrypt number
     enc = rsa.encrypt_to_string(text)
     print(enc)
-    #print(rsa)
     dec = rsa.decrypt_from_string(enc)
     print(dec)
+    print()
+    print(rsa)
 
 # If rsa.py is executed directly, call main()
 if __name__ == "__main__":
