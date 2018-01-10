@@ -7,8 +7,11 @@ import random
 # It provides encrypt(text) and decrypt(num) as its methods designed for external use
 class RSA:
     
+    # Full alphabet for testing encrypt_to_string and decrypt_from_string
     alphabet = " ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜabcdefghijklmnopqrstuvwxyzäöü1234567890!\"§$%&/()[]={}?\\`´*+~#'-_.:,;<>"
-    #alphabet="%abcdefghijklmnopqrstuvwxyz "
+
+    # Normal alphabet
+    #alphabet=" abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
     # Initialize all instance variables
     def __init__(self, length=5):
