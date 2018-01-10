@@ -1,8 +1,6 @@
 import sys
 import math
 import random
-# For efficient modular inverse because I am too lazy to copy it from Wikipedia
-import gmpy2 as gmpy
 
 class RSA:
     
@@ -13,14 +11,14 @@ class RSA:
     # Initialize all instance variables
     def __init__(self, length=5):
         print("Generating primes...")
-        self.p = 29 #self.random_prime(length)
-        self.q = 23 #self.random_prime(length)
+        self.p = self.random_prime(length)
+        self.q = self.random_prime(length)
         print("Calculating n...")
         self.n = self.p * self.q
         self.phi = (self.p - 1) * (self.q - 1)
         self.e = self.choose_e(self.phi)
         print("Finding inverse...")
-        self.d = int(gmpy.invert(self.e, self.phi))
+        self.d = self.modular_inverse(self.e, self.phi)
         #self.d = pow(self.e, self.phi - 1, self.phi)
         print("Done!")
 
@@ -31,6 +29,19 @@ class RSA:
                 return False
         return True
    
+    def modular_inverse(self, a, b):
+        start_b = b
+        print("modular inverse", a,b)
+        alpha,s,beta,t = 1,0,0,1
+        while b != 0:
+            q = a // b
+            a, b = b, a % b
+            alpha, s = s, alpha - q * s
+            #beta, t = t, beta - q * t
+        #return (a, alpha, beta)
+        print(a, alpha, b)
+        return alpha % start_b
+
     # Generates random prime number of the desired length inefficiently
     def random_prime(self, length=5):
         i = random.randint(10**length, 10**(length+1))
