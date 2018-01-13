@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 import sys
 import math
 import random
@@ -53,8 +54,6 @@ class RSA:
             q = a // b
             a, b = b, a % b
             alpha, s = s, alpha - q * s
-            #beta, t = t, beta - q * t
-        #return (a, alpha, beta)
         return alpha % start_b
    
     # Chooses either 65537 or 17 for d with given phi
@@ -64,10 +63,10 @@ class RSA:
         elif phi > 17 and math.gcd(phi, 17) == 1:
             return 17
         else:
-            raise Error("Invalid phi for this implementation")
+            raise Exception("Invalid phi for this implementation")
    
 
-    # The following encryption and decryption functions are in order of application
+    # The following encryption and decryption functions are listed in order of application
 
 
     # Splits a string into pieces of length chars_per_block
@@ -129,6 +128,8 @@ class RSA:
             result += string
         return result
         
+    # Methods for text-to-number encrytion and decryption
+
     # Method to encrypt a piece of text
     def encrypt(self, text):
         split = self.split_string(text)
@@ -138,18 +139,6 @@ class RSA:
         encrypted = self.encrypt_blocks(blocks)
         return self.concat_blocks(encrypted)
     
-    # Encrypt to string. Only works reliably with full alphabet
-    def encrypt_to_string(self, text):
-        assert(len(self.alphabet) == 100)
-        num = self.encrypt(text)
-        return self.number_to_string(num)
-    
-    # Decrypt from string. Only works reliably with full alphabet
-    def decrypt_from_string(self, text):
-        assert(len(self.alphabet) == 100)
-        num = self.string_to_number(text)
-        return self.decrypt(num)
-
     # Method to decrypt a piece of text
     def decrypt(self, number):
         blocks = self.split_number(number)
@@ -158,6 +147,21 @@ class RSA:
         for i in decrypted:
             strings.append(self.number_to_string(i))
         return self.concat_string(strings)
+
+    # The following methods provide text-to text encryption and decryption, but only if an alphabet of size 100 is used
+
+    # Encrypt to string.
+    def encrypt_to_string(self, text):
+        assert(len(self.alphabet) == 100)
+        num = self.encrypt(text)
+        return self.number_to_string(num)
+    
+    # Decrypt from string.
+    def decrypt_from_string(self, text):
+        assert(len(self.alphabet) == 100)
+        num = self.string_to_number(text)
+        return self.decrypt(num)
+
 
     # Returns string representation of instance
     def __str__(self):
@@ -174,6 +178,8 @@ def main(text, length=5):
     rsa = RSA(length)
     print()
     # Encrypt number
+    enc_number = rsa.encrypt(text)
+    print(enc_number)
     enc = rsa.encrypt_to_string(text)
     print(enc)
     dec = rsa.decrypt_from_string(enc)
