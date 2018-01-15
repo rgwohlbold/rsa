@@ -6,8 +6,10 @@ import random
 # Class implementing the RSA cryptosystem
 # Upon initialization, this randomly generates a RSA key pair
 # It provides encrypt(text) and decrypt(num) as its methods designed for external use
+
+
 class RSA:
-    
+
     # Full alphabet for testing encrypt_to_string and decrypt_from_string
     alphabet = " ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜabcdefghijklmnopqrstuvwxyzäöü1234567890!\"§$%&/()[]={}?\\`´*+~#'-_.:,;<>"
 
@@ -30,17 +32,16 @@ class RSA:
         # The number of digits that can be encoded. This is one less than the number of digits of n since if it was higher, the program could not guarantee that no block exceeds n
         # The number of digits in an encrypted block is higher since these can have the amount of digits n has, but in a controlled way since the encryption always goes mod n
         self.digits_per_block = math.floor(math.log(self.n, 10))
-    
 
     # Generates random prime number of the desired length inefficiently
     def random_prime(self, length=5):
-        i = random.randint(10**length, 10**(length+1))
+        i = random.randint(10**length, 10**(length + 1))
         while not self.is_prime(i):
-            i = random.randint(10**(length-1), 10**length)
+            i = random.randint(10**(length - 1), 10**length)
         return i
 
     # Very simple and inefficient primality test
-    def is_prime(self,number):
+    def is_prime(self, number):
         for i in range(2, math.ceil(math.sqrt(number)) + 1):
             if number % i == 0:
                 return False
@@ -49,13 +50,13 @@ class RSA:
     # Calculate modular inverse with Extended Euclidian Algorithm
     def modular_inverse(self, a, b):
         start_b = b
-        alpha,s,beta,t = 1,0,0,1
+        alpha, s, beta, t = 1, 0, 0, 1
         while b != 0:
             q = a // b
             a, b = b, a % b
             alpha, s = s, alpha - q * s
         return alpha % start_b
-   
+
     # Chooses either 65537 or 17 for d with given phi
     def choose_d(self, phi):
         if phi > 65537 and math.gcd(phi, 65537) == 1:
@@ -64,16 +65,14 @@ class RSA:
             return 17
         else:
             raise Exception("Invalid phi for this implementation")
-   
 
     # The following encryption and decryption functions are listed in order of application
-
 
     # Splits a string into pieces of length chars_per_block
     def split_string(self, string):
         blocks = []
         for i in range(0, len(string), self.chars_per_block):
-            blocks.append(string[i:i+self.chars_per_block])
+            blocks.append(string[i:i + self.chars_per_block])
         return blocks
 
     # Converts a string into a number
@@ -82,14 +81,14 @@ class RSA:
         for i in string:
             result = result * 100 + self.alphabet.index(i)
         return result
-    
+
     # Encrypts a list of blocks and returns a list of encrypted blocks
     def encrypt_blocks(self, blocks):
         encrypted = []
         for block in blocks:
             encrypted.append(pow(block, self.d, self.n))
         return encrypted
-    
+
     # Concatenates a list of blocks into a single number
     def concat_blocks(self, blocks):
         number = 0
@@ -110,7 +109,7 @@ class RSA:
     def decrypt_blocks(self, blocks):
         decrypted = []
         for block in blocks:
-           decrypted.append(pow(block, self.e, self.n)) 
+            decrypted.append(pow(block, self.e, self.n))
         return decrypted
 
     # Convert a number to a string given the defined alphabet
@@ -127,7 +126,7 @@ class RSA:
         for string in strings:
             result += string
         return result
-        
+
     # Methods for text-to-number encrytion and decryption
 
     # Method to encrypt a piece of text
@@ -138,7 +137,7 @@ class RSA:
             blocks.append(self.string_to_number(i))
         encrypted = self.encrypt_blocks(blocks)
         return self.concat_blocks(encrypted)
-    
+
     # Method to decrypt a piece of text
     def decrypt(self, number):
         blocks = self.split_number(number)
@@ -155,13 +154,12 @@ class RSA:
         assert(len(self.alphabet) == 100)
         num = self.encrypt(text)
         return self.number_to_string(num)
-    
+
     # Decrypt from string.
     def decrypt_from_string(self, text):
         assert(len(self.alphabet) == 100)
         num = self.string_to_number(text)
         return self.decrypt(num)
-
 
     # Returns string representation of instance
     def __str__(self):
@@ -172,6 +170,7 @@ class RSA:
         result += "d(pub)\t" + str(self.d) + "\n"
         result += "e(priv)\t" + str(self.e)
         return result
+
 
 # Main RSA test function
 def main(text, length=5):
@@ -187,6 +186,7 @@ def main(text, length=5):
     print()
     print(rsa)
 
+
 # If rsa.py is executed directly, call main()
 if __name__ == "__main__":
     # Use given argument as prime length, if available
@@ -195,5 +195,8 @@ if __name__ == "__main__":
     else:
         length = 5
 
-    text = input("What would you like to encrypt? ") 
-    main(text, length) 
+    text = input("What would you like to encrypt? ")
+    main(text, length)
+
+
+main("Hello World", 10)
