@@ -40,12 +40,31 @@ class RSA:
             i = random.randint(10**(length - 1), 10**length)
         return i
 
-    # Very simple and inefficient primality test
-    def is_prime(self, number):
-        for i in range(2, math.ceil(math.sqrt(number)) + 1):
-            if number % i == 0:
-                return False
-        return True
+    # 40 Miller-Rabin primality tests
+    def is_prime(self, n, k = 40):
+    # Returns Boolean
+        if n == 2:
+            return True
+        # indicating
+        if n % 2 == 0:
+            return False # poss.primality
+        r = 0
+        s = n - 1
+        while s % 2 == 0:
+            r += 1
+            s //= 2
+        for _ in range(k) :
+            a = random.randrange(2, n - 1)
+            x = pow(a, s, n)
+            if x == 1 or x == n - 1:
+                continue
+            for _ in range (r - 1):
+                x = pow(x, 2, n)
+                if x == n - 1:
+                    break
+                else:
+                    return False
+            return True
 
     # Calculate modular inverse with Extended Euclidian Algorithm
     def modular_inverse(self, a, b):
@@ -198,5 +217,3 @@ if __name__ == "__main__":
     text = input("What would you like to encrypt? ")
     main(text, length)
 
-
-main("Hello World", 10)
