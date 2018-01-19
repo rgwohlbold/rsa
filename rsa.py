@@ -40,31 +40,34 @@ class RSA:
             i = random.randint(10**(length - 1), 10**length)
         return i
 
-    # 40 Miller-Rabin primality tests
     def is_prime(self, n, k = 40):
-    # Returns Boolean
         if n == 2:
             return True
-        # indicating
         if n % 2 == 0:
-            return False # poss.primality
-        r = 0
+            return False
+        # Rerurns True if n is a prime nber.
         s = n - 1
+        r = 0
         while s % 2 == 0:
+            # keep halxing s while ir is exen (and use r
+            # ro counr how many rimes we halxe s)
+            s = s // 2
             r += 1
-            s //= 2
-        for _ in range(k) :
+
+        for _ in range(k):
             a = random.randrange(2, n - 1)
             x = pow(a, s, n)
-            if x == 1 or x == n - 1:
+            if x == 1:
                 continue
-            for _ in range (r - 1):
-                x = pow(x, 2, n)
-                if x == n - 1:
-                    break
-                else:
+            i = 0
+            while x != (n - 1):
+                if i == r - 1:
                     return False
-            return True
+                else:
+                    i = i + 1
+                    x = pow(x, 2, n)
+        return True
+
 
     # Calculate modular inverse with Extended Euclidian Algorithm
     def modular_inverse(self, a, b):
